@@ -8,7 +8,7 @@
   --font-poppins: Poppins, sans-serif;
   --color-shop-light-pink: #fcf0e4;
   --color-shop-dark-green: #063c28;
-  --color-shop-dark-btn-green: #063D29;
+  --color-shop-dark-btn-green: #063d29;
   --color-shop-light-bg: #f6f6f6;
   --color-shop-light-green: #3b9c3c;
   --color-shop-orange: #fb6c08;
@@ -21,7 +21,7 @@
   --color-dark-text: #686e7d;
   --color-light-bg: #f8f8fb;
   --color-dark-red: #f02757;
-  --color-light-green: #93D991;
+  --color-light-green: #93d991;
   --color-product-bg: #f1f3f8;
 }
 
@@ -146,5 +146,11 @@
   }
   html {
     @apply font-sans;
+  }
+  .hoverEffect {
+    @apply transition-all duration-300 ease-in-out;
+  }
+  button {
+    @apply cursor-pointer;
   }
 }
