@@ -47,7 +47,7 @@ const Footer = () => {
               {categoriesData.map((item) => (
                 <li key={item.title}>
                   <Link
-                    href={`category/${item.href}`}
+                    href={`/category/${item.href}`}
                     className="hover:text-shop-light-green hoverEffect font-medium"
                   >
                     {item.title}
@@ -57,13 +57,18 @@ const Footer = () => {
             </ul>
           </div>
           <div className="space-y-4">
-            <SubTitle>New Letter</SubTitle>
+            <SubTitle>Newsletter</SubTitle>
             <SubText>
-              Subscribe to out newsletter to receive updates and exclusive
+              Subscribe to our newsletter to receive updates and exclusive
               offers
             </SubText>
             <form className="space-y-3">
-              <Input placeholder="Enter your Email" type="email" required />
+              <Input
+                placeholder="Enter your Email"
+                type="email"
+                name="Email"
+                required
+              />
               <Button className="w-full" type="submit">
                 Subscribe
               </Button>
