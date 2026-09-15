@@ -12,7 +12,7 @@ const Logo = ({
     <Link
       href={"/"}
       className={cn(
-        "text-2xl text-shop-dark-green font-black tracking-wider uppercase hover:text-shop-light-green hoverEffect group font-sans",
+        "text-2xl text-shop-dark-green font-black tracking-wider uppercase hover:text-shop-light-green hoverEffect group font-sans inline-flex",
         className,
       )}
     >
