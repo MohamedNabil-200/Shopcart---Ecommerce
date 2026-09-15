@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "../globals.css";
-import { Figtree } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Shopcart online store",
@@ -20,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en" className={cn("font-sans", figtree.variable)}>
+      <html>
         <body>
           <div className="flex flex-col min-h-screen">
             <Header />
