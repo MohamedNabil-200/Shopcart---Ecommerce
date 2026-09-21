@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Hugeicons", "Shopcar"]
+  "cSpell.words": ["Hugeicons", "Shopcar"],
+  "postman.settings.dotenv-detection-notification-visibility": false
 }
