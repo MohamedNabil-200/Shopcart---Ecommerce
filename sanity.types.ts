@@ -299,6 +299,7 @@ export type Category = {
   title?: string;
   slug?: Slug;
   description?: string;
+  productCount?: number;
   range?: number;
   featured?: boolean;
   image?: {
@@ -434,3 +435,63 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
+
+// Source: sanity/queries/query.ts
+// Variable: categoriesQuery
+// Query: *[_type == "category"] | order(name asc) {    ...,    "productCount": count(      *[_type == "product" && references(^._id)]    )  }
+export type CategoriesQueryResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  range?: number;
+  featured?: boolean;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  productCount: number;
+}>;
+
+// Source: sanity/queries/query.ts
+// Variable: categoriesWithQuantityQuery
+// Query: *[_type == "category"] | order(name asc) [0...$quantity] {    ...,    "productCount": count(      *[_type == "product" && references(^._id)]    )  }
+export type CategoriesWithQuantityQueryResult = Array<{
+  _id: string;
+  _type: "category";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  range?: number;
+  featured?: boolean;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  productCount: number;
+}>;
+
+// Query TypeMap
+declare global {
+  interface SanityQueries {
+    '\n  *[_type == "category"] | order(name asc) {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesQueryResult;
+    '\n  *[_type == "category"] | order(name asc) [0...$quantity] {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesWithQuantityQueryResult;
+  }
+}
+// Lets @sanity/client releases that predate the global registry read it too
+declare module "@sanity/client" {
+  interface SanityQueries extends globalThis.SanityQueries {}
+}
