@@ -6,6 +6,10 @@ type PriceFormatterProps = {
 };
 
 const PriceFormatter = ({ amount, className }: PriceFormatterProps) => {
+  if (amount === undefined || amount === null) {
+    return null;
+  }
+
   const formattedPrice = new Number(amount).toLocaleString("en-us", {
     currency: "USD",
     style: "currency",

@@ -16,24 +16,35 @@ const ProductGrid = () => {
   const [selectedTab, setSelectedTab] = useState(productType[0]?.title || "");
 
   const query = `*[_type == "product" && variant == $variant]{...,"categories":categories[]->title}`;
-  const params: Record<string, unknown> = {
-    variant: selectedTab.toLowerCase(),
-  };
 
   useEffect(() => {
+    let isCurrentRequest = true;
+
     const fetchData = async () => {
       setLoading(true);
       try {
+        const params: Record<string, unknown> = {
+          variant: selectedTab.toLowerCase(),
+        };
         const response = await client.fetch(query, params);
+        if (!isCurrentRequest) return;
         setProducts(response);
       } catch (error) {
+        if (!isCurrentRequest) return;
         console.log("Product Fetching Error: ", error);
       } finally {
-        setLoading(false);
+        if (isCurrentRequest) {
+          setLoading(false);
+        }
       }
     };
+
     fetchData();
-  }, [selectedTab]);
+
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [selectedTab, query]);
   return (
     <div>
       <HomeTabBar selectedTab={selectedTab} onTabSelect={setSelectedTab} />

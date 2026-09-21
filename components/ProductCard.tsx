@@ -12,7 +12,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   return (
     <div className="text-sm border border-dark-blue/20 rounded-md bg-white group">
       <div className="relative group overflow-hidden bg-shop-light-bg">
-        {product?.images && (
+        {product.images?.[0] && (
           <Image
             src={urlFor(product.images[0]).url()}
             alt={`${product.name}`}
@@ -69,7 +69,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <p className="text-light-text text-xs tracking-wide">5 Review</p>
         </div>
         <div className="flex items-center gap-2">
-          <p className="font-medium">In Stock</p>
+          <p className="font-medium">{(product.stock as number) > 0 &&  "In Stock"}</p>
           <p
             className={`font-semibold ${product.stock === 0 ? "text-red-600" : "text-shop-light-green"}`}
           >

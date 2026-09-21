@@ -44,7 +44,7 @@ export const productType = defineType({
       name: "discount",
       title: "Discount Percentage %",
       type: "number",
-      validation: (Rule) => Rule.required().min(0),
+      validation: (Rule) => Rule.required().min(0).max(100),
     }),
     defineField({
       name: "categories",

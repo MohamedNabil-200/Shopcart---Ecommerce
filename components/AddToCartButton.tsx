@@ -10,7 +10,7 @@ type AddToCartButtonProps = {
 };
 
 const AddToCartButton = ({ product, className }: AddToCartButtonProps) => {
-  const isOutOfStock = product.stock === 0;
+  const isOutOfStock = (product.stock ?? 0) <= 0;
   const handleAddToCart = () => {
     window.alert("Added to cart");
   };
