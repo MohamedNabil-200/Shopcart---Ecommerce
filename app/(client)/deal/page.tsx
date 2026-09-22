@@ -9,7 +9,7 @@ const DealPage = async () => {
     <div className="py-10 bg-product-bg">
       <Container>
         <Title className="mb-5 underline underline-offset-4 decoration text-base uppercase tracking-wide">
-          Hot Deals od the Week
+          Hot Deals of the Week
         </Title>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {products.map((product) => (
