@@ -299,7 +299,6 @@ export type Category = {
   title?: string;
   slug?: Slug;
   description?: string;
-  productCount?: number;
   range?: number;
   featured?: boolean;
   image?: {
@@ -484,11 +483,33 @@ export type CategoriesWithQuantityQueryResult = Array<{
   productCount: number;
 }>;
 
+// Source: sanity/queries/query.ts
+// Variable: BRANDS_QUERY
+// Query: *[_type == "brand" && defined(slug.current)] | order(title asc)
+export type BRANDS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "brand";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  description?: string;
+  image?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+}>;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '\n  *[_type == "category"] | order(name asc) {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesQueryResult;
     '\n  *[_type == "category"] | order(name asc) [0...$quantity] {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesWithQuantityQueryResult;
+    '\n  *[_type == "brand" && defined(slug.current)] | order(title asc)\n': BRANDS_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too

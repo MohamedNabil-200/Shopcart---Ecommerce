@@ -17,3 +17,7 @@ export const categoriesWithQuantityQuery = defineQuery(`
     )
   }
 `);
+
+export const BRANDS_QUERY = defineQuery(`
+  *[_type == "brand" && defined(slug.current)] | order(title asc)
+`);
