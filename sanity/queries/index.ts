@@ -3,6 +3,7 @@ import {
   BRANDS_QUERY,
   categoriesQuery,
   categoriesWithQuantityQuery,
+  DEAL_PRODUCTS,
   LATEST_BLOG_QUERY,
 } from "./query";
 
@@ -39,4 +40,14 @@ const getLatestBlogs = async () => {
   }
 };
 
-export { getCategories, getAllBrands, getLatestBlogs };
+const getDealProducts = async () => {
+  try {
+    const { data } = await sanityFetch({ query: DEAL_PRODUCTS });
+    return data ?? [];
+  } catch (error) {
+    console.log("Error Fetching Deal Products: ", error);
+    return [];
+  }
+};
+
+export { getCategories, getAllBrands, getLatestBlogs, getDealProducts };

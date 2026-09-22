@@ -531,6 +531,36 @@ export type LATEST_BLOG_QUERY_RESULT = Array<{
   body?: BlockContent;
 }>;
 
+// Source: sanity/queries/query.ts
+// Variable: DEAL_PRODUCTS
+// Query: *[_type == 'product' && status == 'hot'] | order(name asc){    ...,"categories": categories[]->title  }
+export type DEAL_PRODUCTS_RESULT = Array<{
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name?: string;
+  slug?: Slug;
+  images?: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+    _key: string;
+  }>;
+  description?: string;
+  price?: number;
+  discount?: number;
+  categories: Array<string | null> | null;
+  stock?: number;
+  brand?: BrandReference;
+  status: "hot";
+  variant?: "appliances" | "gadget" | "others" | "refrigerators";
+  isFeatured?: boolean;
+}>;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
@@ -538,6 +568,7 @@ declare global {
     '\n  *[_type == "category"] | order(name asc) [0...$quantity] {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesWithQuantityQueryResult;
     '\n  *[_type == "brand" && defined(slug.current)] | order(title asc)\n': BRANDS_QUERY_RESULT;
     '\n  *[_type == "blog" && isLatest == true] | order(name asc) {\n    ...,\n    blogCategories[]->{\n      title\n    }\n  }\n': LATEST_BLOG_QUERY_RESULT;
+    "*[_type == 'product' && status == 'hot'] | order(name asc){\n    ...,\"categories\": categories[]->title\n  }": DEAL_PRODUCTS_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
