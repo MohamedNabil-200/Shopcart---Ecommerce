@@ -4,7 +4,6 @@ import { getAllBrands } from "@/sanity/queries";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
 import { GitCompareArrows, Headset, ShieldCheck, Truck } from "lucide-react";
-import { title } from "process";
 
 const extraData = [
   {
@@ -30,7 +29,9 @@ const extraData = [
 ];
 
 const ShopByBrands = async () => {
-  const brands = await getAllBrands();
+  const brands = (await getAllBrands()) ?? [];
+  const validBrands = brands.filter((brand) => !!brand?.slug?.current);
+
   return (
     <div className="mb-10 lg:mb-20 bg-shop-light-bg p-5 lg:p-7 rounded-md">
       <div className="flex item-center gap-5 justify-between mb-10">
@@ -43,10 +44,10 @@ const ShopByBrands = async () => {
         </Link>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
-        {brands?.map((brand) => (
+        {validBrands.map((brand) => (
           <Link
             key={brand._id}
-            href={`/brand/${brand?.slug?.current}`}
+            href={`/brand/${brand.slug?.current}`}
             className="bg-white p-2 flex items-center justify-center rounded-md overflow-hidden hover:shadow-lg shadow-shop-dark-green/20 hoverEffect"
           >
             {brand?.image && (

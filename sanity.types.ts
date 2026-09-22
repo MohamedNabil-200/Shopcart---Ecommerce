@@ -485,7 +485,7 @@ export type CategoriesWithQuantityQueryResult = Array<{
 
 // Source: sanity/queries/query.ts
 // Variable: BRANDS_QUERY
-// Query: *[_type=='brand'] | order(title asc)
+// Query: *[_type == "brand" && defined(slug.current)] | order(title asc)
 export type BRANDS_QUERY_RESULT = Array<{
   _id: string;
   _type: "brand";
@@ -509,7 +509,7 @@ declare global {
   interface SanityQueries {
     '\n  *[_type == "category"] | order(name asc) {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesQueryResult;
     '\n  *[_type == "category"] | order(name asc) [0...$quantity] {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesWithQuantityQueryResult;
-    "*[_type=='brand'] | order(title asc)": BRANDS_QUERY_RESULT;
+    '\n  *[_type == "brand" && defined(slug.current)] | order(title asc)\n': BRANDS_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
