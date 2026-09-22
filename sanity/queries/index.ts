@@ -3,6 +3,7 @@ import {
   BRANDS_QUERY,
   categoriesQuery,
   categoriesWithQuantityQuery,
+  LATEST_BLOG_QUERY,
 } from "./query";
 
 const getCategories = async (quantity?: number) => {
@@ -28,4 +29,14 @@ const getAllBrands = async () => {
   }
 };
 
-export { getCategories, getAllBrands };
+const getLatestBlogs = async () => {
+  try {
+    const { data } = await sanityFetch({ query: LATEST_BLOG_QUERY });
+    return data ?? [];
+  } catch (error) {
+    console.log("Error Fetching Latest Blogs: ", error);
+    return [];
+  }
+};
+
+export { getCategories, getAllBrands, getLatestBlogs };
