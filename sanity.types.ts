@@ -504,12 +504,40 @@ export type BRANDS_QUERY_RESULT = Array<{
   };
 }>;
 
+// Source: sanity/queries/query.ts
+// Variable: LATEST_BLOG_QUERY
+// Query: *[_type == "blog" && isLatest == true] | order(name asc) {    ...,    blogCategories[]->{      title    }  }
+export type LATEST_BLOG_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "blog";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  slug?: Slug;
+  author?: AuthorReference;
+  mainImage?: {
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: "image";
+  };
+  blogCategories: Array<{
+    title: string | null;
+  }> | null;
+  publishedAt?: string;
+  isLatest: true;
+  body?: BlockContent;
+}>;
+
 // Query TypeMap
 declare global {
   interface SanityQueries {
     '\n  *[_type == "category"] | order(name asc) {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesQueryResult;
     '\n  *[_type == "category"] | order(name asc) [0...$quantity] {\n    ...,\n    "productCount": count(\n      *[_type == "product" && references(^._id)]\n    )\n  }\n': CategoriesWithQuantityQueryResult;
     '\n  *[_type == "brand" && defined(slug.current)] | order(title asc)\n': BRANDS_QUERY_RESULT;
+    '\n  *[_type == "blog" && isLatest == true] | order(name asc) {\n    ...,\n    blogCategories[]->{\n      title\n    }\n  }\n': LATEST_BLOG_QUERY_RESULT;
   }
 }
 // Lets @sanity/client releases that predate the global registry read it too
