@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Category, Product } from "@/sanity.types";
 import { Button } from "./ui/button";
@@ -20,6 +20,7 @@ const CategoryProduct = ({ categories, slug }: CategoryProductProps) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const requestIdRef = useRef(0);
   const router = useRouter();
 
   const handleCategoryChange = (newSlug: string) => {
@@ -29,20 +30,29 @@ const CategoryProduct = ({ categories, slug }: CategoryProductProps) => {
   };
 
   const fetchProducts = async (categorySlug: string) => {
+    const requestId = ++requestIdRef.current;
+
     setLoading(true);
     setError(null);
+
     try {
       const query = `
         *[_type == 'product' && references(*[_type == "category" && slug.current == $categorySlug]._id)] | order(name asc){
         ...,"categories": categories[]->title}
       `;
       const data = await client.fetch(query, { categorySlug });
+
+      if (requestId !== requestIdRef.current) return
+
       setProducts(data);
     } catch (error) {
+      if (requestId !== requestIdRef.current) return;
       console.error("Error fetching products: ", error);
       setProducts([]);
       setError(error instanceof Error ? error.message : String(error));
     } finally {
+      if (requestId !== requestIdRef.current) return;
+      
       setLoading(false);
     }
   };
