@@ -1,3 +1,4 @@
+import "./globals.css"
 import { cn } from "cn";
 import { Figtree } from "next/font/google";
 
