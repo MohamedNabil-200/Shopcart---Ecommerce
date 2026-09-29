@@ -13,14 +13,16 @@ const ProductCard = ({ product }: { product: Product }) => {
     <div className="text-sm border border-dark-blue/20 rounded-md bg-white group">
       <div className="relative group overflow-hidden bg-shop-light-bg">
         {product.images?.[0] && (
-          <Image
-            src={urlFor(product.images[0]).url()}
-            alt={`${product.name}`}
-            loading="lazy"
-            width={700}
-            height={700}
-            className={`w-full h-64 object-contain overflow-hidden transition-transform bg-shop-light-bg hoverEffect ${product.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
-          />
+          <Link href={`/product/${product.slug?.current}`}>
+            <Image
+              src={urlFor(product.images[0]).url()}
+              alt={`${product.name}`}
+              loading="lazy"
+              width={700}
+              height={700}
+              className={`w-full h-64 object-contain overflow-hidden transition-transform bg-shop-light-bg hoverEffect ${product.stock !== 0 ? "group-hover:scale-105" : "opacity-50"}`}
+            />
+          </Link>
         )}
         <div className="absolute top-2 flex flex-row-reverse items-center justify-between left-2 right-2 z-10">
           <AddToWishlistButton product={product} />
@@ -69,7 +71,9 @@ const ProductCard = ({ product }: { product: Product }) => {
           <p className="text-light-text text-xs tracking-wide">5 Review</p>
         </div>
         <div className="flex items-center gap-2">
-          <p className="font-medium">{(product.stock as number) > 0 &&  "In Stock"}</p>
+          <p className="font-medium">
+            {(product.stock as number) > 0 && "In Stock"}
+          </p>
           <p
             className={`font-semibold ${product.stock === 0 ? "text-red-600" : "text-shop-light-green"}`}
           >
