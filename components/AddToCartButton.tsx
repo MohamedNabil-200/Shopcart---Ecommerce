@@ -1,8 +1,9 @@
 "use client";
-import { Product } from "@/sanity.types";
+
 import { Button } from "./ui/button";
 import { ShoppingBag } from "lucide-react";
 import { cn } from "cn";
+import { Product } from "@/sanity.types";
 
 type AddToCartButtonProps = {
   product: Product;
@@ -16,7 +17,7 @@ const AddToCartButton = ({ product, className }: AddToCartButtonProps) => {
   };
 
   return (
-    <div>
+    <div className="w-full h-12 flex items-center">
       <Button
         onClick={handleAddToCart}
         disabled={isOutOfStock}
