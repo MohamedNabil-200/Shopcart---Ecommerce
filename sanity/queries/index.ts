@@ -24,7 +24,7 @@ const getCategories = async (quantity?: number) => {
 
 const getAllBrands = async () => {
   try {
-    const { data } = await sanityFetch({ query: BRANDS_QUERY });
+    const { data } = await sanityFetch({ query: BRANDS_QUERY, stega: false });
     return data ?? [];
   } catch (error) {
     console.log("Error Fetching All Brands: ", error);
