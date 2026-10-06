@@ -3,10 +3,10 @@ import { urlFor } from "@/sanity/lib/image";
 import { Flame, StarIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import AddToWishlistButton from "./AddToWishlistButton";
 import { Title } from "./ui/Text";
 import PriceView from "./PriceView";
 import AddToCartButton from "./AddToCartButton";
+import ProductSideMenu from "./ProductSideMenu";
 
 const ProductCard = ({ product }: { product: Product }) => {
   return (
@@ -24,31 +24,27 @@ const ProductCard = ({ product }: { product: Product }) => {
             />
           </Link>
         )}
-        <div className="absolute top-2 flex flex-row-reverse items-center justify-between left-2 right-2 z-10">
-          <AddToWishlistButton product={product} />
-          {product.status === "sale" && (
-            <p className="text-xs border border-dark-color/50 px-2 rounded-full group-hover:border-shop-light-green group-hover:text-shop-light-green hoverEffect">
-              Sale!
-            </p>
-          )}
-          {product.status === "hot" && (
-            <Link
-              href={"/deal"}
-              className="border border-shop-orange/50 p-1 rounded-full group-hover:border-shop-orange hover:text-shop-dark-green hoverEffect"
-            >
-              <Flame
-                size={18}
-                fill="#fb6c08"
-                className="text-shop-orange/50 group-hover:text-shop-orange hoverEffect"
-              />
-            </Link>
-          )}
-          {product.status === "new" && (
-            <p className="text-xs border border-dark-color/50 px-2 rounded-full group-hover:border-shop-light-green group-hover:text-shop-light-green hoverEffect">
-              New!
-            </p>
-          )}
-        </div>
+        <ProductSideMenu product={product} />
+        {product.status === "sale" ? (
+          <p className="absolute top-3 left-2 z-10 text-xs border border-dark-color/50 px-2 rounded-full group-hover:border-light-green group-hover:text-shop-light-green hoverEffect">
+            Sale!
+          </p>
+        ) : product.status === "hot" ?(
+          <Link
+            href={"/deal"}
+            className="absolute top-2 left-2 z-10 border border-shop-orange/50 p-1 rounded-full group-hover:border-shop-orange hover:text-shop-dark-green hoverEffect"
+          >
+            <Flame
+              size={18}
+              fill="#fb6c08"
+              className="text-shop-orange/50 group-hover:text-shop-orange hoverEffect"
+            />
+          </Link>
+        ): (
+          <p className="absolute top-3 left-2 z-10 text-xs border border-dark-color/50 px-2 rounded-full group-hover:border-shop-light-green group-hover:text-shop-light-green hoverEffect">
+            New!
+          </p>
+        )}
       </div>
       <div className="p-3">
         {product.categories && (
