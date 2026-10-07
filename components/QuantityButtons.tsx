@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@/sanity.types";
 import useStore from "@/store";
 import { Button } from "./ui/button";
@@ -39,7 +41,6 @@ const QuantityButtons = ({ product, className }: QuantityButtonsProps) => {
         onClick={handleRemoveProduct}
         variant="outline"
         size="icon"
-        disabled={isOutOfStock}
         className="w-6 h-6 border hover:bg-shop-dark-green/20 hoverEffect bg-transparent rounded-md"
       >
         <Minus />
