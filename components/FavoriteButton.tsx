@@ -4,6 +4,7 @@ import { Product } from "@/sanity.types";
 import useStore from "@/store";
 import { Heart } from "lucide-react";
 import Link from "next/link";
+import { useSyncExternalStore } from "react";
 import toast from "react-hot-toast";
 
 type FavoriteButtonProps = {
@@ -16,9 +17,22 @@ const FavoriteButton = ({
   product,
 }: FavoriteButtonProps) => {
   const { favoriteProduct, addToFavorite } = useStore();
-  const existingProduct = favoriteProduct.find(
-    (item) => item._id === product?._id,
+
+  const hasHydrated = useSyncExternalStore(
+    (listener) => {
+      const unsubscribe = useStore.persist.onFinishHydration(() => {
+        listener();
+      });
+
+      return unsubscribe;
+    },
+    () => useStore.persist.hasHydrated(),
+    () => false,
   );
+
+  const existingProduct = hasHydrated ? favoriteProduct.find(
+    (item) => item._id === product?._id,
+  ) : undefined;
 
   const handleFavorite = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.preventDefault();
@@ -37,9 +51,11 @@ const FavoriteButton = ({
       {!showProduct ? (
         <Link href={"/wishlist"} className="group relative">
           <Heart className="w-5 h-5 cursor-pointer hover:text-shop-light-green hoverEffect" />
-          <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-shop-dark-green text-white text-xs font-semibold flex items-center justify-center">
-            {favoriteProduct.length ? favoriteProduct.length : 0}
-          </span>
+          {hasHydrated && (
+            <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-shop-dark-green text-white text-xs font-semibold flex items-center justify-center">
+              {favoriteProduct.length ? favoriteProduct.length : 0}
+            </span>
+          )}
         </Link>
       ) : (
         <button

@@ -39,7 +39,7 @@ const AddToCartButton = ({ product, className }: AddToCartButtonProps) => {
           <div className="flex items-center justify-between border-t pt-1">
             <span className="text-xs font-semibold">Subtotal</span>
             <PriceFormatter
-              amount={product.price ? product.price * itemCount : 0}
+              amount={(product.price ?? 0) * (1 - (product.discount ?? 0) / 100) * itemCount}
             />
           </div>
         </div>
