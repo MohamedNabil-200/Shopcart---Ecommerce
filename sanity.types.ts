@@ -298,7 +298,6 @@ export type Category = {
   _rev: string;
   title?: string;
   slug?: Slug;
-  productCount?: number;
   description?: string;
   range?: number;
   featured?: boolean;
