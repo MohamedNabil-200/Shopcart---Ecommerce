@@ -12,8 +12,8 @@ type ProductSideMenuProps = {
 };
 
 const ProductSideMenu = ({ product, className }: ProductSideMenuProps) => {
-  const { favoriteProduct, addToFavorite } = useStore();
-  const existingProduct = favoriteProduct.find(
+  const { favoriteProducts, addToFavorite } = useStore();
+  const existingProduct = favoriteProducts.find(
     (item) => item._id === product._id,
   );
 

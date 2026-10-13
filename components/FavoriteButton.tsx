@@ -7,16 +7,21 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import toast from "react-hot-toast";
 
-type FavoriteButtonProps = {
-  showProduct?: boolean;
-  product: Product;
-};
+type FavoriteButtonProps =
+  | {
+      showProduct: true;
+      product: Product;
+    }
+  | {
+      showProduct?: false;
+      product?: never;
+    };
 
 const FavoriteButton = ({
   showProduct = false,
   product,
 }: FavoriteButtonProps) => {
-  const { favoriteProduct, addToFavorite } = useStore();
+  const { favoriteProducts, addToFavorite } = useStore();
 
   const hasHydrated = useSyncExternalStore(
     (listener) => {
@@ -30,20 +35,23 @@ const FavoriteButton = ({
     () => false,
   );
 
-  const existingProduct = hasHydrated ? favoriteProduct.find(
-    (item) => item._id === product?._id,
-  ) : undefined;
+  const existingProduct = hasHydrated
+    ? favoriteProducts.find((item) => item._id === product?._id)
+    : undefined;
 
   const handleFavorite = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    if (product._id) {
-      addToFavorite(product);
-      toast.success(
-        existingProduct
-          ? "Product Removed Successfully!"
-          : "Product Added Successfully",
-      );
+
+    if (!product?._id) {
+      return;
     }
+
+    addToFavorite(product);
+    toast.success(
+      existingProduct
+        ? "Product Removed Successfully!"
+        : "Product Added Successfully",
+    );
   };
 
   return (
@@ -53,7 +61,7 @@ const FavoriteButton = ({
           <Heart className="w-5 h-5 cursor-pointer hover:text-shop-light-green hoverEffect" />
           {hasHydrated && (
             <span className="absolute -top-1 -right-1 h-3.5 w-3.5 rounded-full bg-shop-dark-green text-white text-xs font-semibold flex items-center justify-center">
-              {favoriteProduct.length ? favoriteProduct.length : 0}
+              {favoriteProducts.length ? favoriteProducts.length : 0}
             </span>
           )}
         </Link>
