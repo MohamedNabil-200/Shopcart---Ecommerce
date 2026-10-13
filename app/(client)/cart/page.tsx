@@ -98,6 +98,8 @@ const CartPage = () => {
     };
   }, []);
 
+  const totalPrice = useStore((state) => state.getTotalPrice());
+
   return (
     <div className="bg-gray-50 pb-52 md:pb-10">
       {isSignedIn ? (
@@ -120,7 +122,7 @@ const CartPage = () => {
                           className="border-b p-2.5 last:border-b-0 flex items-center justify-between gap-5"
                         >
                           <div className="flex flex-1 items-start gap-2 h-36 md:h-44">
-                            {product.images && (
+                            {product.images?.[0] && (
                               <Link
                                 href={`/product/${product.slug?.current}`}
                                 className="border p-0.5 md:p-1 mr-2 rounded-md overflow-hidden group"
@@ -158,12 +160,15 @@ const CartPage = () => {
                                 <TooltipProvider>
                                   {/* Add to Favorite Btn */}
                                   <Tooltip>
-                                    <TooltipTrigger>
-                                      <ProductSideMenu
-                                        product={product}
-                                        className="relative top-0 right-0"
-                                      />
-                                    </TooltipTrigger>
+                                    <TooltipTrigger
+                                      render={
+                                        <ProductSideMenu
+                                          product={product}
+                                          className="relative top-0 right-0"
+                                        />
+                                      }
+                                    />
+
                                     <TooltipContent className="font-bold">
                                       Add to Favorite
                                     </TooltipContent>
@@ -193,7 +198,7 @@ const CartPage = () => {
 
                           <div className="flex flex-col items-start justify-between h-36 md:h-44 p-0.5 md:p-1">
                             <PriceFormatter
-                              amount={(product.price as number) * itemCount}
+                              amount={totalPrice}
                               className="font-bold text-lg"
                             />
                             <QuantityButtons product={product} />
@@ -262,9 +267,14 @@ const CartPage = () => {
                             </CardHeader>
                             <CardContent>
                               <RadioGroup
-                                defaultValue={addresses
-                                  .find((address) => address.default)
-                                  ?._id.toString()}
+                                value={selectedAddress?._id.toString() || ""}
+                                onValueChange={(addressId) => {
+                                  const address = addresses.find(
+                                    (item) => item._id === addressId,
+                                  );
+
+                                  setSelectedAddress(address ?? null);
+                                }}
                               >
                                 {addresses.map((address) => (
                                   <div
@@ -277,7 +287,7 @@ const CartPage = () => {
                                     />
                                     <Label
                                       htmlFor={`address-${address._id}`}
-                                      className="grid gap-1.5 flex-1"
+                                      className="grid gap-1.5 flex-1 cursor-pointer"
                                     >
                                       <span className="font-semibold">
                                         {address.name}
