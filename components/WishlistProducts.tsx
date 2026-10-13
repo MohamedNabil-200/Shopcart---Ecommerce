@@ -1,7 +1,7 @@
 "use client";
 
 import useStore from "@/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "./Container";
 import { Heart, X } from "lucide-react";
 import { Button } from "./ui/button";
@@ -14,6 +14,7 @@ import PriceFormatter from "./PriceFormatter";
 import AddToCartButton from "./AddToCartButton";
 
 const WishlistProducts = () => {
+  const hasHydrated = useStore((state) => state._hasHydrated);
   const [visibleProducts, setVisibleProducts] = useState(7);
   const { favoriteProducts, removeFromFavorite, resetFavorite } = useStore();
   const loadMore = () => {
@@ -29,6 +30,16 @@ const WishlistProducts = () => {
       toast.success("Wishlist reset successfully");
     }
   };
+
+  useEffect(() => {
+    if (!useStore.persist.hasHydrated()) {
+      void useStore.persist.rehydrate();
+    }
+  }, []);
+
+  if (!hasHydrated) {
+    return <p>Loading Wishlist...</p>;
+  }
 
   return (
     <Container>
@@ -54,14 +65,20 @@ const WishlistProducts = () => {
                   ?.map((product: Product) => (
                     <tr key={product._id} className="border-b">
                       <td className="px-2 py-4 flex items-center gap-2">
-                        <X
+                        <button
+                          type="button"
                           onClick={() => {
                             removeFromFavorite(product?._id);
                             toast.success("Product removed from wishlist");
                           }}
-                          size={18}
-                          className="hover:text-dark-red cursor-pointer hoverEffect"
-                        />
+                          aria-label={`Remove ${product.name} frp, wishlist`}
+                        >
+                          <X
+                            size={18}
+                            className="hover:text-dark-red cursor-pointer hoverEffect"
+                            aria-hidden="true"
+                          />
+                        </button>
                         {product?.images?.[0] && (
                           <Link
                             href={`/product/${product.slug?.current}`}
@@ -126,7 +143,11 @@ const WishlistProducts = () => {
             )}
           </div>
           {favoriteProducts.length > 0 && (
-            <Button onClick={handleResetWishlist} className="mb-5 font-semibold" variant="destructive">
+            <Button
+              onClick={handleResetWishlist}
+              className="mb-5 font-semibold"
+              variant="destructive"
+            >
               Reset Wishlist
             </Button>
           )}

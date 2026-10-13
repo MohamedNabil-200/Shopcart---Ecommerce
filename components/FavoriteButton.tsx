@@ -7,10 +7,15 @@ import Link from "next/link";
 import { useSyncExternalStore } from "react";
 import toast from "react-hot-toast";
 
-type FavoriteButtonProps = {
-  showProduct?: boolean;
-  product?: Product;
-};
+type FavoriteButtonProps =
+  | {
+      showProduct: true;
+      product: Product;
+    }
+  | {
+      showProduct?: false;
+      product?: never;
+    };
 
 const FavoriteButton = ({
   showProduct = false,
@@ -30,20 +35,23 @@ const FavoriteButton = ({
     () => false,
   );
 
-  const existingProduct = hasHydrated ? favoriteProducts.find(
-    (item) => item._id === product?._id,
-  ) : undefined;
+  const existingProduct = hasHydrated
+    ? favoriteProducts.find((item) => item._id === product?._id)
+    : undefined;
 
   const handleFavorite = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.preventDefault();
-    if (product._id) {
-      addToFavorite(product);
-      toast.success(
-        existingProduct
-          ? "Product Removed Successfully!"
-          : "Product Added Successfully",
-      );
+
+    if (!product?._id) {
+      return;
     }
+
+    addToFavorite(product);
+    toast.success(
+      existingProduct
+        ? "Product Removed Successfully!"
+        : "Product Added Successfully",
+    );
   };
 
   return (
