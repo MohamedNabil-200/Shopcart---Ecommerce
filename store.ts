@@ -18,7 +18,7 @@ type StoreState = {
   getItemCount: (productId: string) => number;
   getGroupedItems: () => CartItem[];
   // // Favorite
-  favoriteProduct: Product[];
+  favoriteProducts: Product[];
   addToFavorite: (product: Product) => void;
   removeFromFavorite: (productId: string) => void;
   resetFavorite: () => void;
@@ -28,7 +28,7 @@ const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
       items: [],
-      favoriteProduct: [],
+      favoriteProducts: [],
       addItem: (product) =>
         set((state) => {
           const existingItem = state.items.find(
@@ -88,15 +88,15 @@ const useStore = create<StoreState>()(
       addToFavorite: (product: Product) => {
         return new Promise<void>((resolve) => {
           set((state: StoreState) => {
-            const isFavorite = state.favoriteProduct.some(
+            const isFavorite = state.favoriteProducts.some(
               (item) => item._id === product._id,
             );
             return {
-              favoriteProduct: isFavorite
-                ? state.favoriteProduct.filter(
+              favoriteProducts: isFavorite
+                ? state.favoriteProducts.filter(
                     (item) => item._id !== product._id,
                   )
-                : [...state.favoriteProduct, { ...product }],
+                : [...state.favoriteProducts, { ...product }],
             };
           });
           resolve();
@@ -104,13 +104,13 @@ const useStore = create<StoreState>()(
       },
       removeFromFavorite: (productId: string) => {
         set((state: StoreState) => ({
-          favoriteProduct: state.favoriteProduct.filter(
+          favoriteProducts: state.favoriteProducts.filter(
             (item) => item?._id !== productId,
           ),
         }));
       },
       resetFavorite: () => {
-        set({ favoriteProduct: [] });
+        set({ favoriteProducts: [] });
       },
     }),
     {
